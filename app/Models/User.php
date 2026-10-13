@@ -56,4 +56,11 @@ class User extends Authenticatable
     {
         return $this->role === Role::Siswa;
     }
+
+    public function teachesClassroom(Classroom $classroom): bool
+    {
+        return $this->isGuru()
+            && $this->teacher !== null
+            && $classroom->teacher_id === $this->teacher->id;
+    }
 }
