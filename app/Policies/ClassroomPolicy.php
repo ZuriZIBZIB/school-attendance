@@ -32,8 +32,8 @@ class ClassroomPolicy
         return $user->isAdmin();
     }
 
-    public function recordAttendance(User $user, Classroom $classroom): bool
+        public function recordAttendance(User $user, Classroom $classroom): bool
     {
-        return $user->teachesClassroom($classroom);
+        return $user->isAdmin() || $user->teachesClassroom($classroom);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Carbon\CarbonInterface;
 
 class User extends Authenticatable
 {
@@ -62,5 +63,14 @@ class User extends Authenticatable
         return $this->isGuru()
             && $this->teacher !== null
             && $classroom->teacher_id === $this->teacher->id;
+    }
+
+        public function canRecordAttendanceOn(CarbonInterface $date): bool
+    {
+        if ($date->gt(today())) {
+            return false;
+        }
+
+        return $this->isAdmin() || $date->gte(today()->subDays(7));
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 
@@ -19,7 +20,6 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/admin/dashboard', 'dashboard.placeholder', ['role' => 'Admin'])
         ->middleware('role:admin')->name('dashboard.admin');
-    Route::resource('students', StudentController::class)->except('show');
     Route::view('/guru/dashboard', 'dashboard.placeholder', ['role' => 'Guru'])
         ->middleware('role:guru')->name('dashboard.guru');
     Route::view('/siswa/dashboard', 'dashboard.placeholder', ['role' => 'Siswa'])
@@ -27,5 +27,11 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:admin')->group(function () {
         Route::resource('classrooms', ClassroomController::class)->except('show');
+        Route::resource('students', StudentController::class)->except('show');
+    });
+
+    Route::middleware('role:admin,guru')->group(function () {
+        Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendances.index');
+        Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
     });
 });

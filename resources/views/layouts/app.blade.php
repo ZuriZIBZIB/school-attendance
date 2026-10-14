@@ -13,6 +13,7 @@
         ['Dashboard', route('dashboard'), 'dashboard*', ['admin', 'guru', 'siswa']],
         ['Kelas', route('classrooms.index'), 'classrooms*', ['admin']],
         ['Siswa', route('students.index'), 'students*', ['admin']],
+        ['Absensi', route('attendances.index'), 'attendances*', ['admin', 'guru']],
     ];
 @endphp
 <div class="min-h-screen md:flex">
