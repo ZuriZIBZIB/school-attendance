@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,8 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:guru')->name('dashboard.guru');
     Route::view('/siswa/dashboard', 'dashboard.placeholder', ['role' => 'Siswa'])
         ->middleware('role:siswa')->name('dashboard.siswa');
+
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('classrooms', ClassroomController::class)->except('show');
+    });
 });
