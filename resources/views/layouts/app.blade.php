@@ -12,6 +12,7 @@
     $menu = [
         ['Dashboard', route('dashboard'), 'dashboard*', ['admin', 'guru', 'siswa']],
         ['Kelas', route('classrooms.index'), 'classrooms*', ['admin']],
+        ['Siswa', route('students.index'), 'students*', ['admin']],
     ];
 @endphp
 <div class="min-h-screen md:flex">
