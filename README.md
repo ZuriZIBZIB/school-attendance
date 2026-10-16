@@ -57,7 +57,7 @@ Di Windows, Laragon sudah menyediakan PHP, Composer, MySQL, dan Node.
 
 1. Clone repository dan masuk ke foldernya
 ```bash
-   git clone https://github.com/USERNAME/school-attendance.git
+   git clone https://github.com/ZuriZIBZIB/school-attendance.git
    cd school-attendance
 ```
 2. Install dependency
@@ -81,7 +81,7 @@ Di Windows, Laragon sudah menyediakan PHP, Composer, MySQL, dan Node.
    DB_HOST=127.0.0.1
    DB_PORT=3306
    DB_DATABASE=school_attendance
-   DB_USERNAME=root
+   DB_ZuriZIBZIB=root
    DB_PASSWORD=
 ```
 6. Jalankan migration dan seeder
