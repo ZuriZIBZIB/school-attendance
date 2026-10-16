@@ -81,7 +81,7 @@ Di Windows, Laragon sudah menyediakan PHP, Composer, MySQL, dan Node.
    DB_HOST=127.0.0.1
    DB_PORT=3306
    DB_DATABASE=school_attendance
-   DB_ZuriZIBZIB=root
+   DB_USERNAME=root
    DB_PASSWORD=
 ```
 6. Jalankan migration dan seeder
