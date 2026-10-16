@@ -1,59 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# School Attendance Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web absensi siswa untuk sekolah, dibuat sebagai proyek akhir magang SMK. Admin mengelola data sekolah, guru mencatat absensi harian kelasnya, dan siswa melihat riwayat kehadirannya sendiri. Aplikasi memakai backend Laravel dan database MySQL sungguhan, bukan data dummy.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Autentikasi: register siswa (via NIS), login, logout, rate limit percobaan login dan register
+- Role-Based Access Control: Admin, Guru, Siswa (middleware + policy)
+- Manajemen kelas (CRUD, wali kelas, pencarian)
+- Manajemen siswa (CRUD, filter kelas/status, pembuatan akun login siswa)
+- Absensi harian massal: Hadir, Izin, Sakit, Alpa, dengan catatan opsional
+- Dashboard per role dengan statistik dari database dan grafik kehadiran 7 hari kerja
+- Tampilan responsif (desktop, tablet, HP)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Peran dan Hak Akses
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Fitur | Admin | Guru | Siswa |
+|---|---|---|---|
+| Kelola kelas dan siswa | ✅ | ❌ | ❌ |
+| Catat dan edit absensi | ✅ semua kelas | ✅ kelas miliknya, maksimal 7 hari ke belakang | ❌ |
+| Dashboard | Statistik sekolah | Status kelas miliknya | Riwayat miliknya |
 
-## Learning Laravel
+## Teknologi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.3, Laravel 12
+- MySQL 8
+- Blade + Tailwind CSS 4 (Vite)
+- Chart.js untuk grafik
+- Git dan GitHub
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Desain Database
 
-## Laravel Sponsors
+```mermaid
+erDiagram
+    users ||--o| teachers : "profil guru"
+    users ||--o| students : "akun siswa"
+    teachers ||--o{ classrooms : "wali kelas"
+    classrooms ||--o{ students : "memiliki"
+    students ||--o{ attendances : "memiliki"
+    classrooms ||--o{ attendances : "kelas saat absen"
+    users ||--o{ attendances : "pencatat"
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Aturan penting: `attendances` memiliki unique `(student_id, date)` sehingga satu siswa hanya punya satu catatan per tanggal. Tanggal absensi (`date`) dipisahkan dari waktu pencatatan (`created_at`). Foreign key ke data absensi memakai `restrict`, jadi siswa dan kelas yang punya riwayat tidak bisa dihapus; cukup dinonaktifkan.
 
-### Premium Partners
+## Persyaratan
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP 8.2 atau lebih baru (diuji dengan 8.3)
+- Composer 2
+- Node.js 20 atau lebih baru dan npm
+- MySQL 8
+- Git
 
-## Contributing
+Di Windows, Laragon sudah menyediakan PHP, Composer, MySQL, dan Node.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Instalasi
 
-## Code of Conduct
+1. Clone repository dan masuk ke foldernya
+```bash
+   git clone https://github.com/USERNAME/school-attendance.git
+   cd school-attendance
+```
+2. Install dependency
+```bash
+   composer install
+   npm install
+```
+3. Salin file environment dan buat application key
+```bash
+   cp .env.example .env
+   php artisan key:generate
+```
+   Di Windows PowerShell/CMD: `copy .env.example .env`
+4. Buat database MySQL
+```bash
+   mysql -u root -e "CREATE DATABASE school_attendance CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+5. Sesuaikan koneksi database di `.env` bila perlu
+```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=school_attendance
+   DB_USERNAME=root
+   DB_PASSWORD=
+```
+6. Jalankan migration dan seeder
+```bash
+   php artisan migrate --seed
+```
+7. Build aset frontend, lalu jalankan aplikasi
+```bash
+   npm run build
+   php artisan serve
+```
+   Buka http://127.0.0.1:8000
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Untuk pengembangan, jalankan `npm run dev` di terminal terpisah agar perubahan tampilan langsung terlihat.
 
-## Security Vulnerabilities
+## Akun Demo (khusus lokal)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Semua akun memakai password `password`. Data seeder fiktif dan hanya untuk pengembangan lokal; jangan dipakai di server publik.
 
-## License
+| Role | Email |
+|---|---|
+| Admin | `admin@sekolah.test` |
+| Guru (wali X RPL 1) | `guru1@sekolah.test` |
+| Guru (wali XI RPL 1) | `guru2@sekolah.test` |
+| Guru (wali XII RPL 1) | `guru3@sekolah.test` |
+| Siswa | `siswa1@sekolah.test` sampai `siswa6@sekolah.test` |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Untuk mencoba pendaftaran siswa, buka `/register` dan gunakan NIS yang belum punya akun, misalnya `20260003`.
+
+## Aturan Absensi
+
+- Satu siswa hanya memiliki satu catatan absensi per tanggal
+- Guru hanya dapat mencatat kelas yang menjadi tanggung jawabnya, dari hari ini sampai 7 hari ke belakang; tanggal mendatang ditolak
+- Admin dapat mengoreksi absensi semua kelas
+- Semua siswa aktif di kelas harus terisi, dan penyimpanan massal berjalan dalam satu transaksi database
+- Persentase kehadiran dihitung dari jumlah Hadir dibagi total catatan
+
+## Keamanan
+
+- Password di-hash dengan mekanisme Laravel
+- Proteksi CSRF bawaan Laravel dan validasi input di sisi server
+- Akses dibatasi oleh middleware role dan policy; siswa hanya melihat data miliknya
+- File `.env` tidak ikut di-commit
+
+## Batasan
+
+- Tidak ada validasi lokasi, biometrik, atau fitur anti-kecurangan
+- Pendaftaran siswa memakai NIS sebagai kunci klaim akun

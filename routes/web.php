@@ -21,11 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::view('/admin/dashboard', 'dashboard.placeholder', ['role' => 'Admin'])
+        Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
         ->middleware('role:admin')->name('dashboard.admin');
-    Route::view('/guru/dashboard', 'dashboard.placeholder', ['role' => 'Guru'])
+    Route::get('/guru/dashboard', [DashboardController::class, 'guru'])
         ->middleware('role:guru')->name('dashboard.guru');
-    Route::view('/siswa/dashboard', 'dashboard.placeholder', ['role' => 'Siswa'])
+    Route::get('/siswa/dashboard', [DashboardController::class, 'siswa'])
         ->middleware('role:siswa')->name('dashboard.siswa');
 
     Route::middleware('role:admin')->group(function () {
