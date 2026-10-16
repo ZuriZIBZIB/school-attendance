@@ -30,6 +30,9 @@
             </label>
             <button type="submit" class="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Masuk</button>
         </form>
+                <p class="mt-4 text-center text-sm text-slate-500">
+            Siswa belum punya akun? <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:underline">Daftar</a>
+        </p>
     </div>
 </body>
 </html>
