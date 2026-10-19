@@ -1,0 +1,1 @@
+<x-error-page code="429" title="Terlalu banyak permintaan" message="Tunggu beberapa saat sebelum mencoba lagi." />

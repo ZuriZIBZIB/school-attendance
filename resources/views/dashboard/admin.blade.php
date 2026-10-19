@@ -23,6 +23,7 @@
     <div class="mt-8 rounded-xl border border-slate-200 bg-white p-4">
         <h2 class="mb-3 text-sm font-semibold text-slate-700">Rekap Kehadiran 7 Hari Kerja Terakhir</h2>
         <div class="relative h-72">
+                        <p id="chart-loading" class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Memuat grafik...</p>
             <canvas id="attendance-chart" data-chart="{{ json_encode($chart) }}"></canvas>
         </div>
     </div>

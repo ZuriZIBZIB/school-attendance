@@ -3,7 +3,9 @@
 @section('content')
     <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-xl font-semibold">Kelas</h1>
-        <a href="{{ route('classrooms.create') }}" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Tambah Kelas</a>
+                <a href="{{ route('classrooms.create') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+            {{ svg('heroicon-o-plus', 'h-4 w-4') }} Tambah Kelas
+        </a>
     </div>
 
     <form method="GET" class="mb-4 flex gap-2">
@@ -31,12 +33,16 @@
                         <td class="px-4 py-3">{{ $classroom->teacher?->full_name ?? '-' }}</td>
                         <td class="px-4 py-3">{{ $classroom->students_count }}</td>
                         <td class="px-4 py-3">
-                            <div class="flex justify-end gap-2">
-                                <a href="{{ route('classrooms.edit', $classroom) }}" class="rounded-lg border border-slate-300 px-3 py-1 hover:bg-slate-50">Edit</a>
+                                                        <div class="flex justify-end gap-2">
+                                <a href="{{ route('classrooms.edit', $classroom) }}" class="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1 hover:bg-slate-50">
+                                    {{ svg('heroicon-o-pencil-square', 'h-4 w-4') }} Edit
+                                </a>
                                 <form method="POST" action="{{ route('classrooms.destroy', $classroom) }}" onsubmit="return confirm('Hapus kelas ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="rounded-lg border border-red-200 px-3 py-1 text-red-600 hover:bg-red-50">Hapus</button>
+                                    <button class="inline-flex items-center gap-1 rounded-lg border border-red-200 px-3 py-1 text-red-600 hover:bg-red-50">
+                                        {{ svg('heroicon-o-trash', 'h-4 w-4') }} Hapus
+                                    </button>
                                 </form>
                             </div>
                         </td>
